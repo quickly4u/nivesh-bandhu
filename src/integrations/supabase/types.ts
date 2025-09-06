@@ -14,7 +14,364 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          annual_turnover: number
+          business_type: string
+          cin: string
+          created_at: string
+          employee_count: number
+          gstin: string | null
+          id: string
+          incorporation_date: string
+          name: string
+          pan: string
+          registered_address: Json
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          annual_turnover: number
+          business_type: string
+          cin: string
+          created_at?: string
+          employee_count: number
+          gstin?: string | null
+          id?: string
+          incorporation_date: string
+          name: string
+          pan: string
+          registered_address: Json
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          annual_turnover?: number
+          business_type?: string
+          cin?: string
+          created_at?: string
+          employee_count?: number
+          gstin?: string | null
+          id?: string
+          incorporation_date?: string
+          name?: string
+          pan?: string
+          registered_address?: Json
+          state?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      compliances: {
+        Row: {
+          company_id: string
+          created_at: string
+          description: string | null
+          frequency: string
+          id: string
+          is_active: boolean | null
+          last_completed_date: string | null
+          name: string
+          next_due_date: string
+          priority: string
+          regulatory_body: string
+          status: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          description?: string | null
+          frequency: string
+          id?: string
+          is_active?: boolean | null
+          last_completed_date?: string | null
+          name: string
+          next_due_date: string
+          priority: string
+          regulatory_body: string
+          status?: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          frequency?: string
+          id?: string
+          is_active?: boolean | null
+          last_completed_date?: string | null
+          name?: string
+          next_due_date?: string
+          priority?: string
+          regulatory_body?: string
+          status?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliances_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          category: string
+          company_id: string
+          compliance_id: string | null
+          description: string | null
+          expiry_date: string | null
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          is_required: boolean | null
+          name: string
+          uploaded_at: string
+          uploaded_by: string
+        }
+        Insert: {
+          category: string
+          company_id: string
+          compliance_id?: string | null
+          description?: string | null
+          expiry_date?: string | null
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          is_required?: boolean | null
+          name: string
+          uploaded_at?: string
+          uploaded_by: string
+        }
+        Update: {
+          category?: string
+          company_id?: string
+          compliance_id?: string | null
+          description?: string | null
+          expiry_date?: string | null
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          is_required?: boolean | null
+          name?: string
+          uploaded_at?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_compliance_id_fkey"
+            columns: ["compliance_id"]
+            isOneToOne: false
+            referencedRelation: "compliances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          compliance_id: string | null
+          created_at: string
+          due_date: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          task_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          compliance_id?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          task_id?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          compliance_id?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          task_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_compliance_id_fkey"
+            columns: ["compliance_id"]
+            isOneToOne: false
+            referencedRelation: "compliances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          id: string
+          is_primary: boolean | null
+          last_login: string | null
+          name: string
+          notification_preferences: Json | null
+          phone: string | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          id: string
+          is_primary?: boolean | null
+          last_login?: string | null
+          name: string
+          notification_preferences?: Json | null
+          phone?: string | null
+          role: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          is_primary?: boolean | null
+          last_login?: string | null
+          name?: string
+          notification_preferences?: Json | null
+          phone?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          assigned_to: string | null
+          checklist: Json | null
+          completed_at: string | null
+          completed_by: string | null
+          compliance_id: string
+          created_at: string
+          description: string | null
+          due_date: string
+          id: string
+          notes: string | null
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          checklist?: Json | null
+          completed_at?: string | null
+          completed_by?: string | null
+          compliance_id: string
+          created_at?: string
+          description?: string | null
+          due_date: string
+          id?: string
+          notes?: string | null
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          checklist?: Json | null
+          completed_at?: string | null
+          completed_by?: string | null
+          compliance_id?: string
+          created_at?: string
+          description?: string | null
+          due_date?: string
+          id?: string
+          notes?: string | null
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_completed_by_fkey"
+            columns: ["completed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_compliance_id_fkey"
+            columns: ["compliance_id"]
+            isOneToOne: false
+            referencedRelation: "compliances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

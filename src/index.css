@@ -1,96 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
+/* Professional Compliance Management Platform Design System */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Brand Colors - Professional Blue Theme */
+    --background: 249 250 251;
+    --foreground: 15 23 42;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary Brand - Deep Professional Blue */
+    --primary: 217 91% 40%;
+    --primary-foreground: 255 255 255;
+    --primary-hover: 217 91% 35%;
+    --primary-light: 217 91% 95%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary Colors - Professional Grays */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 15 23 42;
+    --secondary-hover: 210 40% 92%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Status Colors */
+    --success: 142 71% 45%;
+    --success-foreground: 255 255 255;
+    --success-light: 142 71% 95%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --warning: 45 93% 47%;
+    --warning-foreground: 15 23 42;
+    --warning-light: 45 93% 95%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --error: 0 84% 60%;
+    --error-foreground: 255 255 255;
+    --error-light: 0 84% 95%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --info: 199 89% 48%;
+    --info-foreground: 255 255 255;
+    --info-light: 199 89% 95%;
 
+    /* Neutral Colors */
+    --muted: 210 40% 96%;
+    --muted-foreground: 100 7% 45%;
+
+    --accent: 210 40% 94%;
+    --accent-foreground: 15 23 42;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 255 255 255;
+
+    /* Interactive Elements */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 40%;
+
+    /* Layout */
     --radius: 0.5rem;
+    --header-height: 4rem;
+    --sidebar-width: 16rem;
+    --sidebar-collapsed-width: 4rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 40%), hsl(217 91% 35%));
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%), hsl(142 71% 40%));
+    --gradient-warning: linear-gradient(135deg, hsl(45 93% 47%), hsl(45 93% 42%));
+    --gradient-subtle: linear-gradient(180deg, hsl(255 255 255), hsl(249 250 251));
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Sidebar */
+    --sidebar-background: 255 255 255;
+    --sidebar-foreground: 15 23 42;
+    --sidebar-primary: 217 91% 40%;
+    --sidebar-primary-foreground: 255 255 255;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 15 23 42;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 217 91% 40%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Animation Timings */
+    --transition-fast: 150ms;
+    --transition-normal: 250ms;
+    --transition-slow: 350ms;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 15 23 42;
+    --foreground: 248 250 252;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 30 41 59;
+    --card-foreground: 248 250 252;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 30 41 59;
+    --popover-foreground: 248 250 252;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 217 91% 55%;
+    --primary-foreground: 15 23 42;
+    --primary-hover: 217 91% 60%;
+    --primary-light: 217 91% 15%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 51 65 85;
+    --secondary-foreground: 248 250 252;
+    --secondary-hover: 71 85 105;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 51 65 85;
+    --muted-foreground: 148 163 184;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 51 65 85;
+    --accent-foreground: 248 250 252;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 248 250 252;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 51 65 85;
+    --input: 51 65 85;
+    --ring: 217 91% 55%;
+
+    --sidebar-background: 30 41 59;
+    --sidebar-foreground: 248 250 252;
+    --sidebar-primary: 217 91% 55%;
+    --sidebar-primary-foreground: 15 23 42;
+    --sidebar-accent: 51 65 85;
+    --sidebar-accent-foreground: 248 250 252;
+    --sidebar-border: 51 65 85;
+    --sidebar-ring: 217 91% 55%;
   }
 }
 
@@ -100,6 +143,111 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  h1 { @apply text-3xl lg:text-4xl; }
+  h2 { @apply text-2xl lg:text-3xl; }
+  h3 { @apply text-xl lg:text-2xl; }
+  h4 { @apply text-lg lg:text-xl; }
+  h5 { @apply text-base lg:text-lg; }
+  h6 { @apply text-sm lg:text-base; }
+}
+
+@layer components {
+  /* Status Indicators */
+  .status-success {
+    @apply bg-success-light text-success border-success/20;
+  }
+
+  .status-warning {
+    @apply bg-warning-light text-warning-foreground border-warning/20;
+  }
+
+  .status-error {
+    @apply bg-error-light text-error border-error/20;
+  }
+
+  .status-info {
+    @apply bg-info-light text-info border-info/20;
+  }
+
+  /* Priority Indicators */
+  .priority-low {
+    @apply bg-muted text-muted-foreground border-border;
+  }
+
+  .priority-medium {
+    @apply bg-warning-light text-warning-foreground border-warning/20;
+  }
+
+  .priority-high {
+    @apply bg-error-light text-error border-error/20;
+  }
+
+  .priority-critical {
+    @apply bg-gradient-to-r from-error to-destructive text-error-foreground border-error/30 animate-pulse;
+  }
+
+  /* Card Variants */
+  .card-elevated {
+    @apply bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-200;
+  }
+
+  .card-interactive {
+    @apply card-elevated hover:border-primary/30 cursor-pointer;
+  }
+
+  /* Button Variants */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary to-primary-hover text-primary-foreground;
+  }
+
+  .btn-ghost-primary {
+    @apply text-primary hover:bg-primary-light border-primary/20;
+  }
+
+  /* Layout Utilities */
+  .container-app {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .header-height {
+    height: var(--header-height);
+  }
+
+  .sidebar-width {
+    width: var(--sidebar-width);
+  }
+
+  .sidebar-collapsed-width {
+    width: var(--sidebar-collapsed-width);
+  }
+
+  /* Animation Classes */
+  .animate-slide-in {
+    @apply animate-[slide-in-right_0.3s_ease-out];
+  }
+
+  .animate-fade-in {
+    @apply animate-[fade-in_0.3s_ease-out];
+  }
+
+  .animate-scale-in {
+    @apply animate-[scale-in_0.2s_ease-out];
+  }
+
+  /* Professional Hover Effects */
+  .hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-1;
+  }
+
+  .hover-glow {
+    @apply transition-shadow duration-300 hover:shadow-xl hover:shadow-primary/10;
   }
 }
