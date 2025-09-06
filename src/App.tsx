@@ -5,7 +5,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { AuthPage } from "@/pages/auth/AuthPage";
+import { OnboardingPage } from "@/pages/auth/OnboardingPage";
 import { Dashboard } from "@/pages/Dashboard";
+import { CompliancesPage } from "@/pages/Compliances";
+import { ComplianceDetailPage } from "@/pages/ComplianceDetail";
+import { TasksPage } from "@/pages/Tasks";
+import { CalendarPage } from "@/pages/Calendar";
+import { DocumentsPage } from "@/pages/Documents";
+import { NotificationsPage } from "@/pages/Notifications";
+import { CompanyPage } from "@/pages/Company";
+import { TeamPage } from "@/pages/Team";
+import { ReportsPage } from "@/pages/Reports";
+import { NotificationSettingsPage } from "@/pages/NotificationSettings";
 import { AppLayout } from "@/components/layout/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -39,6 +50,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route 
               path="/dashboard" 
@@ -52,21 +64,23 @@ const App = () => (
               path="/compliances" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Compliances</h1>
-                    <p className="text-muted-foreground">Compliance management coming soon...</p>
-                  </div>
+                  <CompliancesPage />
                 </ProtectedRoute>
               } 
+            />
+            <Route
+              path="/compliances/:id"
+              element={
+                <ProtectedRoute>
+                  <ComplianceDetailPage />
+                </ProtectedRoute>
+              }
             />
             <Route 
               path="/tasks" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Tasks</h1>
-                    <p className="text-muted-foreground">Task management coming soon...</p>
-                  </div>
+                  <TasksPage />
                 </ProtectedRoute>
               } 
             />
@@ -74,10 +88,7 @@ const App = () => (
               path="/calendar" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Calendar</h1>
-                    <p className="text-muted-foreground">Calendar view coming soon...</p>
-                  </div>
+                  <CalendarPage />
                 </ProtectedRoute>
               } 
             />
@@ -85,10 +96,7 @@ const App = () => (
               path="/documents" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Documents</h1>
-                    <p className="text-muted-foreground">Document management coming soon...</p>
-                  </div>
+                  <DocumentsPage />
                 </ProtectedRoute>
               } 
             />
@@ -96,10 +104,15 @@ const App = () => (
               path="/notifications" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Notifications</h1>
-                    <p className="text-muted-foreground">Notifications coming soon...</p>
-                  </div>
+                  <NotificationsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/notifications/settings" 
+              element={
+                <ProtectedRoute>
+                  <NotificationSettingsPage />
                 </ProtectedRoute>
               } 
             />
@@ -107,10 +120,7 @@ const App = () => (
               path="/company" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Company Settings</h1>
-                    <p className="text-muted-foreground">Company management coming soon...</p>
-                  </div>
+                  <CompanyPage />
                 </ProtectedRoute>
               } 
             />
@@ -118,10 +128,7 @@ const App = () => (
               path="/team" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Team Management</h1>
-                    <p className="text-muted-foreground">Team management coming soon...</p>
-                  </div>
+                  <TeamPage />
                 </ProtectedRoute>
               } 
             />
@@ -129,10 +136,7 @@ const App = () => (
               path="/reports" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold">Reports</h1>
-                    <p className="text-muted-foreground">Analytics and reports coming soon...</p>
-                  </div>
+                  <ReportsPage />
                 </ProtectedRoute>
               } 
             />

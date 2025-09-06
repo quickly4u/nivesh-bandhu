@@ -10,9 +10,10 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, userData: { name: string }) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, userData: { name: string; [key: string]: any }) => Promise<{ error: any; data?: any }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<void>;
+  updateProfileWithCompany: (profileData: Partial<Profile>, companyId: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -51,10 +52,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: data.role as Profile['role'],
         notification_preferences: (data.notification_preferences as unknown) as NotificationPrefs,
       };
-
       setProfile(profile);
     } catch (error) {
       console.error('Error fetching profile:', error);
+    }
+  };
+
+  // Finalize onboarding after login by linking company and inserting compliances
+  const finalizePendingOnboarding = async (userId: string) => {
+    const pendingCompanyId = localStorage.getItem('pending_company_id');
+    const pendingCompliancesRaw = localStorage.getItem('pending_compliances');
+    const pendingPhone = localStorage.getItem('pending_phone');
+
+    if (!pendingCompanyId) return; // nothing to do
+
+    try {
+      // 1) Link profile to company and set phone, primary
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          company_id: pendingCompanyId,
+          phone: pendingPhone ?? undefined,
+          is_primary: true,
+        })
+        .eq('id', userId);
+
+      if (profileError) throw profileError;
+
+      // 2) Insert compliances if present
+      if (pendingCompliancesRaw) {
+        const pendingCompliances = JSON.parse(pendingCompliancesRaw) as Array<any>;
+        if (Array.isArray(pendingCompliances) && pendingCompliances.length > 0) {
+          const withCompany = pendingCompliances.map((c) => ({ ...c, company_id: pendingCompanyId }));
+          const { error: cError } = await supabase.from('compliances').insert(withCompany);
+          if (cError) throw cError;
+        }
+      }
+
+      // 3) Cleanup
+      localStorage.removeItem('pending_company_id');
+      localStorage.removeItem('pending_compliances');
+      localStorage.removeItem('pending_phone');
+
+      // Refresh profile in state
+      await fetchProfile(userId);
+
+      toast({
+        title: 'Setup Complete',
+        description: 'Your company has been linked and compliances initialized.',
+      });
+    } catch (e: any) {
+      console.error('Error finalizing onboarding:', e);
+      toast({
+        title: 'Setup Error',
+        description: e.message ?? 'Unable to complete onboarding automatically.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -69,6 +122,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // Defer profile fetch to avoid recursive issues
           setTimeout(() => {
             fetchProfile(session.user.id);
+          }, 0);
+
+          // Finalize any pending onboarding work stored pre-auth
+          setTimeout(() => {
+            finalizePendingOnboarding(session.user!.id).catch((e) => {
+              console.error('Finalize onboarding error:', e);
+            });
           }, 0);
         } else {
           setProfile(null);
@@ -86,6 +146,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         setTimeout(() => {
           fetchProfile(session.user.id);
+        }, 0);
+
+        // Also run finalizer on initial load if logged in
+        setTimeout(() => {
+          finalizePendingOnboarding(session.user!.id).catch((e) => {
+            console.error('Finalize onboarding error (initial):', e);
+          });
         }, 0);
       }
       
@@ -112,17 +179,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error };
   };
 
-  const signUp = async (email: string, password: string, userData: { name: string }) => {
+  const signUp = async (email: string, password: string, userData: { name: string; [key: string]: any }) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectUrl,
-        data: {
-          name: userData.name,
-        },
+        data: userData,
       },
     });
 
@@ -139,7 +204,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     }
 
-    return { error };
+    return { error, data };
   };
 
   const signOut = async () => {
@@ -191,6 +256,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const updateProfileWithCompany = async (profileData: Partial<Profile>, companyId: string) => {
+    if (!user) return;
+
+    try {
+      const dbUpdates = {
+        ...profileData,
+        company_id: companyId,
+        notification_preferences: profileData.notification_preferences ? 
+          profileData.notification_preferences as any : undefined,
+      };
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(dbUpdates)
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      // Fetch updated profile
+      await fetchProfile(user.id);
+      
+      toast({
+        title: "Setup Complete",
+        description: "Your company profile has been created successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Setup Error",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
   const value = {
     user,
     session,
@@ -200,6 +300,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signOut,
     updateProfile,
+    updateProfileWithCompany,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -17,9 +17,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { CompanyStats, Compliance, Task, ChecklistItem } from '@/types';
 import { formatDistanceToNow, format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 export const Dashboard: React.FC = () => {
   const { profile } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState<CompanyStats | null>(null);
   const [upcomingCompliances, setUpcomingCompliances] = useState<Compliance[]>([]);
   const [recentTasks, setRecentTasks] = useState<Task[]>([]);
@@ -244,7 +246,7 @@ export const Dashboard: React.FC = () => {
                 No upcoming deadlines
               </p>
             )}
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => navigate('/compliances')}>
               View All Compliances
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -287,7 +289,7 @@ export const Dashboard: React.FC = () => {
                 No recent tasks
               </p>
             )}
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => navigate('/tasks')}>
               View All Tasks
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -305,21 +307,21 @@ export const Dashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
-            <Button className="btn-gradient justify-start h-auto p-4">
+            <Button className="btn-gradient justify-start h-auto p-4" onClick={() => navigate('/documents')}>
               <FileText className="mr-2 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Upload Document</div>
                 <div className="text-sm opacity-80">Add compliance documents</div>
               </div>
             </Button>
-            <Button variant="outline" className="justify-start h-auto p-4">
+            <Button variant="outline" className="justify-start h-auto p-4" onClick={() => navigate('/calendar')}>
               <Calendar className="mr-2 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">View Calendar</div>
                 <div className="text-sm text-muted-foreground">See all deadlines</div>
               </div>
             </Button>
-            <Button variant="outline" className="justify-start h-auto p-4">
+            <Button variant="outline" className="justify-start h-auto p-4" onClick={() => navigate('/notifications')}>
               <Bell className="mr-2 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Notifications</div>

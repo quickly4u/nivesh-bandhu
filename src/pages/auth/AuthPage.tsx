@@ -148,70 +148,20 @@ export const AuthPage: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name">Full Name</Label>
-                    <Input
-                      id="signup-name"
-                      type="text"
-                      placeholder="Enter your full name"
-                      {...signUpForm.register('name', { required: 'Name is required' })}
-                    />
-                    {signUpForm.formState.errors.name && (
-                      <p className="text-sm text-error">
-                        {signUpForm.formState.errors.name.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      placeholder="Enter your email"
-                      {...signUpForm.register('email', { required: 'Email is required' })}
-                    />
-                    {signUpForm.formState.errors.email && (
-                      <p className="text-sm text-error">
-                        {signUpForm.formState.errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <Input
-                      id="signup-password"
-                      type="password"
-                      placeholder="Create a password"
-                      {...signUpForm.register('password', { 
-                        required: 'Password is required',
-                        minLength: { value: 6, message: 'Password must be at least 6 characters' }
-                      })}
-                    />
-                    {signUpForm.formState.errors.password && (
-                      <p className="text-sm text-error">
-                        {signUpForm.formState.errors.password.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-confirm">Confirm Password</Label>
-                    <Input
-                      id="signup-confirm"
-                      type="password"
-                      placeholder="Confirm your password"
-                      {...signUpForm.register('confirmPassword', { required: 'Please confirm your password' })}
-                    />
-                    {signUpForm.formState.errors.confirmPassword && (
-                      <p className="text-sm text-error">
-                        {signUpForm.formState.errors.confirmPassword.message}
-                      </p>
-                    )}
-                  </div>
-                  <Button type="submit" className="w-full btn-gradient" disabled={isLoading}>
-                    {isLoading ? 'Creating account...' : 'Create Account'}
+                <div className="text-center space-y-4">
+                  <p className="text-muted-foreground">
+                    We'll guide you through a simple 4-step setup process to create your company profile and identify applicable compliance requirements.
+                  </p>
+                  <Button 
+                    onClick={() => window.location.href = '/onboarding'} 
+                    className="w-full btn-gradient"
+                  >
+                    Start Company Setup
                   </Button>
-                </form>
+                  <p className="text-xs text-muted-foreground">
+                    Takes about 5 minutes to complete
+                  </p>
+                </div>
               </CardContent>
             </TabsContent>
           </Tabs>
